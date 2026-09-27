@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NINJAS.CG.OFC — Painel da Guilda</title>
+<style>
+:root{--yellow:#ffd400;--dark:#080808;--card:#151515;--muted:#a9a9a9}
+*{box-sizing:border-box} body{margin:0;font-family:Arial,sans-serif;background:radial-gradient(circle at top,#292300 0,#080808 42%);color:#fff}
+header{padding:30px 18px;text-align:center;border-bottom:1px solid #3d3600;background:#0b0b0b}
+.badge{display:inline-block;background:var(--yellow);color:#000;font-weight:900;padding:7px 12px;transform:skew(-8deg);font-size:12px}
+h1{margin:12px 0 4px;font-size:34px;letter-spacing:2px;color:var(--yellow);text-shadow:0 0 18px #ffd40055}
+header p{margin:0;color:#aaa}.wrap{max-width:1000px;margin:auto;padding:20px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.stat,.card{background:linear-gradient(145deg,#1b1b1b,#0f0f0f);border:1px solid #383000;border-radius:14px;box-shadow:0 8px 30px #0008}
+.stat{padding:18px}.stat b{font-size:28px;color:var(--yellow)}.stat span{display:block;color:#aaa;font-size:12px;margin-top:5px}
+.card{margin-top:18px;padding:20px}h2{margin:0 0 15px;color:var(--yellow)}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:13px 8px;border-bottom:1px solid #292929}th{font-size:12px;color:#999;text-transform:uppercase}.rank{font-weight:900;color:var(--yellow)}.mvp{color:#fff;font-weight:bold}
+.progress{height:8px;background:#292929;border-radius:10px;overflow:hidden}.bar{height:100%;background:var(--yellow);width:75%}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.player{padding:16px;background:#111;border:1px solid #292929;border-radius:12px}.player strong{display:block}.player small{color:#aaa}.player .pts{color:var(--yellow);font-size:22px;font-weight:900;margin-top:8px}
+button{background:var(--yellow);border:0;padding:11px 15px;border-radius:9px;font-weight:900;cursor:pointer}button:hover{filter:brightness(1.1)}
+footer{text-align:center;padding:30px;color:#777;font-size:12px}
+@media(max-width:700px){.grid{grid-template-columns:repeat(2,1fr)}.cards{grid-template-columns:1fr}h1{font-size:28px}table{font-size:13px}}
+</style>
+</head>
+<body>
+<header>
+  <span class="badge">GUILDA OFICIAL</span>
+  <h1>⚡ NINJAS.CG.OFC ⚡</h1>
+  <p>Painel de desempenho • foco • disciplina • respeito • evolução</p>
+</header>
+<main class="wrap">
+  <section class="grid">
+    <div class="stat"><b id="members">12</b><span>MEMBROS</span></div>
+    <div class="stat"><b id="points">1.850</b><span>PONTOS TOTAIS</span></div>
+    <div class="stat"><b>🥇</b><span>MVP DA SEMANA</span></div>
+    <div class="stat"><b id="matches">47</b><span>PARTIDAS</span></div>
+  </section>
+
+  <section class="card">
+    <h2>🏆 RANKING DA GUILDA</h2>
+    <table>
+      <thead><tr><th>#</th><th>Jogador</th><th>Pontos</th><th>Evolução</th></tr></thead>
+      <tbody id="ranking"></tbody>
+    </table>
+  </section>
+
+  <section class="card">
+    <h2>⭐ DESTAQUES</h2>
+    <div class="cards">
+      <div class="player"><small>MVP DA SEMANA</small><strong id="mvp">NINJA_01</strong><div class="pts">520 pts</div></div>
+      <div class="player"><small>MAIOR EVOLUÇÃO</small><strong>NINJA_07</strong><div class="pts">+180 pts</div></div>
+      <div class="player"><small>MAIS PARTIDAS</small><strong>NINJA_03</strong><div class="pts">15 partidas</div></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>📈 META DA GUILDA</h2>
+    <p style="color:#aaa">Progresso da meta semanal</p>
+    <div class="progress"><div class="bar" id="goal"></div></div>
+    <p><strong id="goalText">75%</strong> concluído</p>
+    <button onclick="addPoints()">+ Adicionar 50 pontos</button>
+    <button onclick="resetPoints()" style="margin-left:6px;background:#333;color:#fff">Resetar</button>
+  </section>
+</main>
+<footer>NINJAS.CG.OFC • Foco, disciplina, respeito e evolução.</footer>
+
+<script>
+const players=[
+ {n:"NINJA_01",p:520},{n:"NINJA_02",p:410},{n:"NINJA_03",p:320},
+ {n:"NINJA_04",p:250},{n:"NINJA_05",p:180},{n:"NINJA_06",p:170}
+];
+let base=1850;
+function render(){
+ const tbody=document.getElementById("ranking");
+ tbody.innerHTML=players.sort((a,b)=>b.p-a.p).map((x,i)=>
+ `<tr><td class="rank">${i+1}</td><td class="${i===0?'mvp':''}">${i===0?'👑 ':''}${x.n}</td><td><b>${x.p}</b></td><td><div class="progress"><div class="bar" style="width:${Math.min(100,x.p/5.2)}%"></div></div></td></tr>`).join("");
+ document.getElementById("points").textContent=players.reduce((s,x)=>s+x.p,0).toLocaleString("pt-BR");
+ document.getElementById("members").textContent=players.length;
+}
+function addPoints(){players[0].p+=50;render();document.getElementById("goal").style.width=Math.min(100,parseInt(document.getElementById("goal").style.width||"75")+2)+"%";}
+function resetPoints(){players[0].p=520;render();}
+render();
+</script>
+</body>
+</html>
